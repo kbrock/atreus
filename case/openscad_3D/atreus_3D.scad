@@ -68,8 +68,7 @@ module rz(angle, center=undef) {
   translate(center) {
     rotate(angle) {
       translate(-center) {
-        for (i=[0:$children-1])
-          children(i);
+         children();
       }
     }
   }
@@ -129,20 +128,14 @@ module rotate_half() {
      the thumb key. Assumes that the thumb key is a 1x1.5 key and that
      it is shifted 0.5*column_spacing up relative to the nearest column. */
   rotation_y_offset = 1.75 * column_spacing;
-  for (i=[0:$children-1]) {
-    rz(angle, [hand_separation, rotation_y_offset]) {
-      children(i);
-    }
+  rz(angle, [hand_separation, rotation_y_offset]) {
+    children();
   }
 }
 
 module add_hand_separation() {
   /* Shift everything right to get desired hand separation. */
-  for (i=[0:$children-1]) {
-    translate([0.5*hand_separation, /* we get back the full separation
-                                       because of mirroring */
-               0]) children(i);
-  }
+    translate([0.5*hand_separation, 0]) children();
 }
 
 module right_half (switch_holes=true, key_size=key_hole_size) {
