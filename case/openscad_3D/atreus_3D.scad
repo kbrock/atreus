@@ -111,21 +111,10 @@ module regular_key(position, size) {
   }
 }
 
-module thumb_key(position, size) {
-  /* Create a hole for a 1x1.5 unit thumb key. */
-  translate(position) {
-    scale([1, 1.5]) {
-      translate(-position) {
-        regular_key(position, size);
-      }
-    }
-  }
-}
-
-module column (bottom_position, switch_holes, key_size=key_hole_size) {
+module column(bottom_position, switch_holes, key_size=key_hole_size, num_keys= n_rows) {
   /* Create a column of keys. */
   translate(bottom_position) {
-    for (i = [0:(n_rows-1)]) {
+    for (i = [0:(num_keys-1)]) {
       if (switch_holes == true) {
         switch_hole([0, i*column_spacing,-1]);
       } else {
@@ -166,14 +155,10 @@ module right_half (switch_holes=true, key_size=key_hole_size) {
   rotate_half() {
     add_hand_separation() {
       for (j=[0:(n_thumb_keys-1)]) {
-        if (switch_holes == true) {
-          switch_hole([x_offset + j*row_spacing, thumb_key_offset,-1]);
-        } else {
-          thumb_key([x_offset + j*row_spacing, thumb_key_offset,-1], key_size);
-        }
+        column([x_offset + j*row_spacing, thumb_key_offset,0], switch_holes, key_size * 1.5, 1);
       }
       for (j=[0:(n_cols-1)]) {
-        column([x_offset + (j+n_thumb_keys)*row_spacing, y_offset + staggering_offsets[j]], switch_holes, key_size);
+        column([x_offset + (j+n_thumb_keys)*row_spacing, y_offset + staggering_offsets[j]], switch_holes, key_size, n_rows);
       }
     }
   }
